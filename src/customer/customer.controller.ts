@@ -1,34 +1,26 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { CustomerService } from './customer.service';
 import { CreateCustomerDto } from './dto/create-customer.dto';
-import { UpdateCustomerDto } from './dto/update-customer.dto';
+import { MessagePattern, Payload } from '@nestjs/microservices';
+import { Customer } from './entities/customer.entity';
+
+const GET_CUSTOMER = 'get_customer';
 
 @Controller('customer')
 export class CustomerController {
   constructor(private readonly customerService: CustomerService) {}
 
   @Post()
-  create(@Body() createCustomerDto: CreateCustomerDto) {
-    return this.customerService.create(createCustomerDto);
+  async createCustomer(@Body() dto: CreateCustomerDto) {
+    return await this.customerService.createCustomer(dto);
   }
 
-  @Get()
-  findAll() {
-    return this.customerService.findAll();
-  }
+  @MessagePattern(GET_CUSTOMER)
+  async handleGetCustomer(
+    @Payload() data: { customerId: string },
+  ): Promise<Customer> {
+    const { customerId } = data;
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.customerService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCustomerDto: UpdateCustomerDto) {
-    return this.customerService.update(+id, updateCustomerDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.customerService.remove(+id);
+    return await this.customerService.getCustomer(customerId);
   }
 }
