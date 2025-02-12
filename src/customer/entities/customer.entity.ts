@@ -10,7 +10,7 @@ import {
 @Entity()
 export class Customer {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  public id: string;
 
   @CreateDateColumn()
   public createdAt: Date;
@@ -22,11 +22,11 @@ export class Customer {
   public deletedAt: Date;
 
   @Column()
-  name: string;
+  public name: string;
 
   @Column()
-  email: string;
+  public email: string;
 
   @Column()
-  phone: string;
+  public phone: string;
 }
