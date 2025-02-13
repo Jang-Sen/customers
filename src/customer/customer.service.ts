@@ -18,6 +18,7 @@ export class CustomerService {
     return await this.repository.save(customer);
   }
 
+  // 조회
   async getCustomer(customerId: string): Promise<Customer> {
     const customer = await this.repository.findOneBy({ id: customerId });
 

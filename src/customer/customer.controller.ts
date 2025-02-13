@@ -3,14 +3,17 @@ import { CustomerService } from './customer.service';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { Customer } from './entities/customer.entity';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 const GET_CUSTOMER = 'get_customer';
 
+@ApiTags('Customer')
 @Controller('customer')
 export class CustomerController {
   constructor(private readonly customerService: CustomerService) {}
 
   @Post()
+  @ApiOperation({ summary: '고객 등록' })
   async createCustomer(@Body() dto: CreateCustomerDto) {
     return await this.customerService.createCustomer(dto);
   }
